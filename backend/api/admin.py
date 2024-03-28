@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import FaqAnswer
+
+@admin.register(FaqAnswer)
+class FaqAnswersAdmin(admin.ModelAdmin):
+    list_display = ["title", "answer"]
