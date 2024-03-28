@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.request import Request
 
 from .models import FaqAnswer
+from .serializers import FaqAnswerSerializer
 
 log_level = logging.INFO
 bl.basic_colorized_config(level=log_level)
@@ -27,15 +28,16 @@ class FaqAnswersList(APIView):
         try:
             answers = FaqAnswer.objects.all()
 
-            if not answers:
+            if not answers.exists():
                 return Response(
                     status=status.HTTP_404_NOT_FOUND,
                     data={"message": "No answers found"},
                 )
             else:
+                serializer = FaqAnswerSerializer(answers, many=True)
                 return Response(
                     status=status.HTTP_200_OK,
-                    data={"answers": answers},
+                    data={"answers": serializer.data},
                 )
         except Exception as e:
             logger.error(f"Something went wrong, error: {e}")
