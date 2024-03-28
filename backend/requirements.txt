@@ -2,3 +2,4 @@ django
 django-rest-framework
 environs
 betterlogging
+psycopg2-binary
