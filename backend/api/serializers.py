@@ -5,4 +5,5 @@ from .models import FaqAnswer
 class FaqAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = FaqAnswer
-        fields = "__all__"
+        fields = ["title", "content"]
+

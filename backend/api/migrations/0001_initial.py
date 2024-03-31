@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('answer_id', models.BigAutoField(primary_key=True, serialize=False, verbose_name='FAQ ID')),
                 ('title', models.CharField(max_length=255, verbose_name='Title')),
-                ('answer', models.TextField(max_length=1000, verbose_name='Answer')),
+                ('content', models.TextField(max_length=1000, verbose_name='Content')),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Updated at')),
             ],

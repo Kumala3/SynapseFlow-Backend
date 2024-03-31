@@ -4,4 +4,4 @@ from .models import FaqAnswer
 
 @admin.register(FaqAnswer)
 class FaqAnswersAdmin(admin.ModelAdmin):
-    list_display = ["title", "answer"]
+    list_display = ["title", "content"]
