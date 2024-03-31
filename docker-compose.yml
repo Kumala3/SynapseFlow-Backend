@@ -1,5 +1,7 @@
 version: "3.9"
 
+name: synapse-backend
+
 services:
   database:
     container_name: postgres

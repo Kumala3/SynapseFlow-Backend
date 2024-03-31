@@ -3,3 +3,5 @@ django-rest-framework
 environs
 betterlogging
 psycopg2-binary
+django-cors-headers
+
