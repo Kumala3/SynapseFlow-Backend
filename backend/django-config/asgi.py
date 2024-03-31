@@ -1,5 +1,5 @@
 """
-ASGI config for synapseflow project.
+ASGI config for synapseflow-backend project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

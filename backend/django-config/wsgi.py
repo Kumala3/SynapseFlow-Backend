@@ -1,5 +1,5 @@
 """
-WSGI config for synapseflow project.
+WSGI config for synapseflow-backend project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
