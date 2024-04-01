@@ -11,4 +11,4 @@ class FaqAnswerSerializer(serializers.ModelSerializer):
 class PartnerCompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = PartnerCompany
-        fields = ["company_name", "company_logo"]
+        fields = ["company_name", "company_logo", "company_website"]
