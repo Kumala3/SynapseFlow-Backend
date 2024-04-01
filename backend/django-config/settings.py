@@ -55,7 +55,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
 ]
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://synapseflow.vercel.app/"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://synapseflow.vercel.app"]
 
 ROOT_URLCONF = "django-config.urls"
 
