@@ -101,7 +101,14 @@ class Miscellaneous:
         A string used to hold other various parameters as required (default is None).
     """
 
-    other_params: str = None
+    secret_key: str
+
+    def from_env(env: Env):
+        """
+        Creates the Miscellaneous object from environment variables.
+        """
+        secret_key = env.str("SECRET_KEY")
+        return Miscellaneous(secret_key=secret_key)
 
 
 @dataclass
@@ -122,7 +129,7 @@ class Config:
     """
 
     misc: Miscellaneous
-    db: Optional[DbConfig] = None
+    db: DbConfig
     redis: Optional[RedisConfig] = None
 
 
@@ -142,5 +149,5 @@ def load_config(path: str = None) -> Config:
     return Config(
         db=DbConfig.from_env(env),
         # redis=RedisConfig.from_env(env),
-        misc=Miscellaneous(),
+        misc=Miscellaneous.from_env(env),
     )
