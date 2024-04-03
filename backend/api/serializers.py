@@ -17,5 +17,7 @@ class PartnerCompanySerializer(serializers.ModelSerializer):
 class FaqQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = FaqQuestion
-        fields = "__all__"
+        fields = ["question", "email"]
 
+    def create(self, validated_data):
+        return FaqQuestion.objects.create(**validated_data)

@@ -25,10 +25,10 @@ class PartnerCompany(models.Model):
 
 class FaqQuestion(models.Model):
     question_id = models.BigAutoField(verbose_name="FAQ ID", primary_key=True)
-    title = models.CharField(max_length=255, verbose_name="Title")
-    content = models.TextField(max_length=1000, verbose_name="Content")
+    email = models.TextField(max_length=100, verbose_name="Customer email")
+    question = models.TextField(max_length=1000, verbose_name="Content")
     created_at = models.DateTimeField(verbose_name="Created at", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="Updated at", auto_now=True)
 
     def __str__(self):
-        return f"The faq-question-id: {self.question_id};title: {self.title}"
+        return f"The faq-question-id: {self.question_id};email: {self.email}"

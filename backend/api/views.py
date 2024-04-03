@@ -76,7 +76,33 @@ class FaqQuestionView(APIView):
 
     def post(self, request: Request):
         try:
-            pass
+            question = request.data.get("question")
+            email = request.data.get("email")
+
+            if not question or not email:
+                return Response(
+                    status=status.HTTP_400_BAD_REQUEST,
+                    data={"message": "Please provide question and email"},
+                )
+
+            data = {
+                "question": question,
+                "email": email,
+            }
+
+            serializer = FaqQuestionSerializer(data=data)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    status=status.HTTP_201_CREATED,
+                    data={"status": "success"},
+                )
+            else:
+                return Response(
+                    status=status.HTTP_400_BAD_REQUEST,
+                    data={"message": serializer.errors},
+                )
         except Exception as e:
             logger.error(f"Something went wrong, error: {e}")
             return Response(
