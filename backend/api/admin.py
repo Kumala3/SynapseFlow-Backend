@@ -14,4 +14,4 @@ class PartnerCompanyAdmin(admin.ModelAdmin):
 
 @admin.register(FaqQuestion)
 class FaqQuestionAdmin(admin.ModelAdmin):
-    list_display = ["title", "content"]
+    list_display = ["email", "question", "created_at"]
