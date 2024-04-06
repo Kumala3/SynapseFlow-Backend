@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.request import Request
 
-from .models import FaqAnswer, PartnerCompany
-from .serializers import FaqAnswerSerializer, PartnerCompanySerializer
+from .models import FaqAnswer, PartnerCompany, FaqQuestion
+from .serializers import FaqAnswerSerializer, PartnerCompanySerializer, FaqQuestionSerializer
 
 log_level = logging.INFO
 bl.basic_colorized_config(level=log_level)
@@ -24,7 +24,6 @@ class FaqAnswersListView(APIView):
             answers = FaqAnswer.objects.all()
 
             if not answers.exists():
-                logger.info("No faq-answers found")
                 return Response(
                     status=status.HTTP_404_NOT_FOUND,
                     data={"message": "No answers found"},
@@ -49,7 +48,6 @@ class PartnerCompaniesListView(APIView):
             partner_companies = PartnerCompany.objects.all()
 
             if not partner_companies.exists():
-                logger.info("No partner-companies found")
                 return Response(
                     status=status.HTTP_404_NOT_FOUND,
                     data={"message": "No partner-companies found"},
@@ -60,6 +58,50 @@ class PartnerCompaniesListView(APIView):
                 return Response(
                     status=status.HTTP_200_OK,
                     data={"partner_companies": serializer.data},
+                )
+        except Exception as e:
+            logger.error(f"Something went wrong, error: {e}")
+            return Response(
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                data={"message": "Internal server error"},
+            )
+
+
+class FaqQuestionView(APIView):
+    def get(self, request: Request):
+        return Response(
+            status=status.HTTP_200_OK,
+            data={"message": "This is the faq-question view"},
+        )
+
+    def post(self, request: Request):
+        try:
+            question = request.data.get("question")
+            email = request.data.get("email")
+
+            if not question or not email:
+                return Response(
+                    status=status.HTTP_400_BAD_REQUEST,
+                    data={"message": "Please provide question and email"},
+                )
+
+            data = {
+                "question": question,
+                "email": email,
+            }
+
+            serializer = FaqQuestionSerializer(data=data)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    status=status.HTTP_201_CREATED,
+                    data={"status": "success"},
+                )
+            else:
+                return Response(
+                    status=status.HTTP_400_BAD_REQUEST,
+                    data={"message": serializer.errors},
                 )
         except Exception as e:
             logger.error(f"Something went wrong, error: {e}")
