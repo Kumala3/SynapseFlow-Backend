@@ -4,8 +4,8 @@ name: synapse-backend
 
 services:
   database:
-    container_name: postgres
     image: postgres:13-alpine
+    container_name: postgres
     ports:
       - "2311:5432"
     restart: always
@@ -26,8 +26,8 @@ services:
         max-file: "10"
 
   rest-api:
-    container_name: rest-api
     image: django-app
+    container_name: rest-api
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -39,6 +39,22 @@ services:
       - "6020:6020"
     links:
       - "database"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - rest-api
+    volumes:
+      - ./nginx.conf:/etc/nginx.conf    
+    restart: always
     logging:
       driver: "json-file"
       options:
