@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class FaqAnswer(models.Model):
     answer_id = models.BigAutoField(verbose_name="FAQ ID", primary_key=True)
     title = models.CharField(max_length=255, verbose_name="Title")
@@ -22,3 +23,20 @@ class PartnerCompany(models.Model):
     def __str__(self):
         return f"The partner-company-id: {self.company_id};company_name: {self.company_name}"
 
+
+class Plan(models.Model):
+    plan = models.CharField(max_length=100)
+    description = models.TextField()
+    cost = models.IntegerField()
+    button_text = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.plan
+
+
+class PlanAdvantage(models.Model):
+    plan = models.ForeignKey(Plan, related_name="advantages", on_delete=models.CASCADE)
+    advantage = models.TextField()
+
+    def __str__(self):
+        return self.advantage
