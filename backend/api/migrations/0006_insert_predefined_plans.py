@@ -11,19 +11,19 @@ def insert_predefined_plans(apps, schema_editor):
             "plan": "Free Trial",
             "description": "Perfect for testing our features",
             "cost": 0,
-            "buttonText": "Start free trial",
+            "button_text": "Start free trial",
         },
         {
             "plan": "Pro",
             "description": "For professional users",
             "cost": 80,
-            "buttonText": "Get started",
+            "button_text": "Get started",
         },
         {
             "plan": "Business",
             "description": "For medium and large businesses",
             "cost": 200,
-            "buttonText": "Contact Sales",
+            "button_text": "Contact Sales",
         },
     ]
 
