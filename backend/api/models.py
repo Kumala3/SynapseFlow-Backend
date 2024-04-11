@@ -22,3 +22,13 @@ class PartnerCompany(models.Model):
     def __str__(self):
         return f"The partner-company-id: {self.company_id};company_name: {self.company_name}"
 
+
+class FaqQuestion(models.Model):
+    question_id = models.BigAutoField(verbose_name="FAQ ID", primary_key=True)
+    email = models.TextField(max_length=100, verbose_name="Customer email")
+    question = models.TextField(max_length=1000, verbose_name="Content")
+    created_at = models.DateTimeField(verbose_name="Created at", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="Updated at", auto_now=True)
+
+    def __str__(self):
+        return f"The faq-question-id: {self.question_id};email: {self.email}"
