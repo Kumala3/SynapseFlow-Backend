@@ -52,7 +52,7 @@ def insert_plans_advantages(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("api", "0006_insert_predefined_plans"),
+        ("api", "0007_insert_predefined_plans"),
     ]
 
     operations = [migrations.RunPython(insert_plans_advantages)]

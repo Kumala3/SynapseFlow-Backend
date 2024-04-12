@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0004_insert_partners_companies_data'),
+        ("api", "0005_faqquestion"),
     ]
 
     operations = [
