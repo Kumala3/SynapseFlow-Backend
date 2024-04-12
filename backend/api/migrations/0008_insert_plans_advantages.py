@@ -4,17 +4,17 @@ from django.db import migrations
 
 
 def insert_advantages_for_plan(plan_name: str, advantages: list, apps):
-    Plan = apps.get_model("api", "Plan")
-    PlanAdvantage = apps.get_model("api", "PlanAdvantage")
+    PricingPlan = apps.get_model("api", "PricingPlan")
+    PricingPlanAdvantage = apps.get_model("api", "PricingPlanAdvantage")
 
-    plan = Plan.objects.get(plan=plan_name)
+    plan = PricingPlan.objects.get(plan=plan_name)
 
     for advantage in advantages:
-        PlanAdvantage.objects.create(plan=plan, **advantage)
+        PricingPlanAdvantage.objects.create(plan=plan, **advantage)
 
 
 def insert_plans_advantages(apps, schema_editor):
-    freeTrialAdvantages = [
+    HobbyAdvantages = [
         {"advantage": "🔍 Access to basic AI models"},
         {"advantage": "📧 Basic support via email"},
         {"advantage": "3️⃣🤖 Up to 3 projects with AI integration"},
@@ -41,9 +41,7 @@ def insert_plans_advantages(apps, schema_editor):
         {"advantage": "🎓🔄 Onboarding and continuous training sessions for your team"},
     ]
 
-    insert_advantages_for_plan(
-        plan_name="Free Trial", advantages=freeTrialAdvantages, apps=apps
-    )
+    insert_advantages_for_plan(plan_name="Hobby", advantages=HobbyAdvantages, apps=apps)
     insert_advantages_for_plan(plan_name="Pro", advantages=ProAdvantages, apps=apps)
     insert_advantages_for_plan(
         plan_name="Business", advantages=BusinessAdvantages, apps=apps

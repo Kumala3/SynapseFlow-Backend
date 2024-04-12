@@ -4,31 +4,31 @@ from django.db import migrations
 
 
 def insert_predefined_plans(apps, schema_editor):
-    Plan = apps.get_model("api", "Plan")
+    PricingPlan = apps.get_model("api", "PricingPlan")
 
     predefined_plans = [
         {
-            "plan": "Free Trial",
+            "plan": "Hobby",
             "description": "Perfect for testing our features",
-            "cost": 0,
-            "button_text": "Start free trial",
+            "cost": 5,
+            "button_text": "Open up Hobby",
         },
         {
             "plan": "Pro",
             "description": "For professional users",
-            "cost": 80,
+            "cost": 20,
             "button_text": "Get started",
         },
         {
             "plan": "Business",
             "description": "For medium and large businesses",
-            "cost": 200,
+            "cost": 40,
             "button_text": "Contact Sales",
         },
     ]
 
     for plan_info in predefined_plans:
-        Plan.objects.create(**plan_info)
+        PricingPlan.objects.create(**plan_info)
 
 
 class Migration(migrations.Migration):

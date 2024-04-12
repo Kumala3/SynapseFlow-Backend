@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Plan',
+            name='PricingPlan',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('plan', models.CharField(max_length=100)),
@@ -22,11 +22,11 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='PlanAdvantage',
+            name='PricingPlanAdvantage',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('advantage', models.TextField()),
-                ('plan', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='advantages', to='api.plan')),
+                ('plan', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='advantages', to='api.pricingplan')),
             ],
         ),
     ]
