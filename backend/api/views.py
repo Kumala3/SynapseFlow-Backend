@@ -6,8 +6,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.request import Request
 
-from .models import FaqAnswer, PartnerCompany, FaqQuestion
-from .serializers import FaqAnswerSerializer, PartnerCompanySerializer, FaqQuestionSerializer
+from .models import FaqAnswer, PartnerCompany, PricingPlan
+from .serializers import (
+    FaqAnswerSerializer,
+    PartnerCompanySerializer,
+    FaqQuestionSerializer,
+    PricingPlanSerializer,
+)
 
 log_level = logging.INFO
 bl.basic_colorized_config(level=log_level)
@@ -102,6 +107,30 @@ class FaqQuestionView(APIView):
                 return Response(
                     status=status.HTTP_400_BAD_REQUEST,
                     data={"message": serializer.errors},
+                )
+        except Exception as e:
+            logger.error(f"Something went wrong, error: {e}")
+            return Response(
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                data={"message": "Internal server error"},
+            )
+
+
+class PricingPlansView(APIView):
+    def get(self, request: Request):
+        try:
+            pricing_plan = PricingPlan.objects.all()
+
+            if not pricing_plan.exists():
+                return Response(
+                    status=status.HTTP_404_NOT_FOUND,
+                    data={"message": "No pricing-plans found"},
+                )
+            else:
+                serializer = PricingPlanSerializer(pricing_plan, many=True)
+                return Response(
+                    status=status.HTTP_200_OK,
+                    data={"pricing_plans": serializer.data},
                 )
         except Exception as e:
             logger.error(f"Something went wrong, error: {e}")
