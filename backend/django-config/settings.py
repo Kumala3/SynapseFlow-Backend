@@ -27,9 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = misc.secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["api.candeel.me"]
 
 # Application definition
 
@@ -57,7 +57,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
 ]
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://synapseflow.vercel.app"]
+CORS_ALLOWED_ORIGINS = ["https://synapseflow.vercel.app"]
 
 ROOT_URLCONF = "django-config.urls"
 
