@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from .models import FaqAnswer, PartnerCompany, FaqQuestion
+from .models import (
+    FaqAnswer,
+    PartnerCompany,
+    FaqQuestion,
+    PricingPlan,
+    PricingPlanAdvantage,
+)
 
 
 class FaqAnswerSerializer(serializers.ModelSerializer):
@@ -23,10 +29,15 @@ class PartnerCompanySerializer(serializers.ModelSerializer):
         fields = ["company_name", "company_logo", "company_website"]
 
 
-class FaqQuestionSerializer(serializers.ModelSerializer):
+class PricingPlanAdvantageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FaqQuestion
-        fields = ["question", "email"]
+        model = PricingPlanAdvantage
+        fields = ["advantage"]
 
-    def create(self, validated_data):
-        return FaqQuestion.objects.create(**validated_data)
+
+class PricingPlanSerializer(serializers.ModelSerializer):
+    advantages = PricingPlanAdvantageSerializer(many=True)
+
+    class Meta:
+        model = PricingPlan
+        fields = ["plan", "description", "cost", "button_text", "advantages"]
