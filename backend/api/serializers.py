@@ -8,6 +8,15 @@ class FaqAnswerSerializer(serializers.ModelSerializer):
         fields = ["title", "content"]
 
 
+class FaqQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FaqQuestion
+        fields = ["question", "email"]
+
+    def create(self, validated_data):
+        return FaqQuestion.objects.create(**validated_data)
+
+
 class PartnerCompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = PartnerCompany
