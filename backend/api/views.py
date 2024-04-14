@@ -110,7 +110,7 @@ class FaqQuestionView(APIView):
             else:
                 return Response(
                     status=status.HTTP_400_BAD_REQUEST,
-                    data={"message": serializer.errors},
+                    data={"error_message": serializer.errors},
                 )
         except Throttled as exc:
             wait = exc.wait()
