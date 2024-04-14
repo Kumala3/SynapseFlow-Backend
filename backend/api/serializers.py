@@ -1,3 +1,6 @@
+import logging
+import betterlogging as bl
+
 from rest_framework import serializers
 from .models import (
     FaqAnswer,
@@ -7,6 +10,19 @@ from .models import (
     PricingPlanAdvantage,
 )
 
+from email_validator import (
+    validate_email as validate_email_address,
+    EmailNotValidError,
+)
+
+log_level = logging.INFO
+bl.basic_colorized_config(level=log_level)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s",
+)
+logger = logging.getLogger(__name__)
+
 
 class FaqAnswerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,9 +31,28 @@ class FaqAnswerSerializer(serializers.ModelSerializer):
 
 
 class FaqQuestionSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField()
+    question = serializers.CharField(max_length=800)
+
     class Meta:
         model = FaqQuestion
         fields = ["question", "email"]
+
+    def validate_email(self, value):
+        try:
+            valid = validate_email_address(value)
+            email = valid.email
+        except EmailNotValidError as e:
+            logger.error(f"Email validation error: {e}")
+            raise serializers.ValidationError("Invalid email address")
+        return email
+
+    def validate_question(self, question):
+        if len(question) < 50 or len(question) > 800:
+            raise serializers.ValidationError(
+                "Question must be at least 50 characters and no more than 800 characters"
+            )
+        return question
 
     def create(self, validated_data):
         return FaqQuestion.objects.create(**validated_data)
