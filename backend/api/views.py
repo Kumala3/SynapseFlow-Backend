@@ -5,7 +5,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.request import Request
+from rest_framework.exceptions import Throttled
 
+from .throttles import FaqQuestionAnonRateThrottle, FaqQuestionRateThrottle
 from .models import FaqAnswer, PartnerCompany, PricingPlan
 from .serializers import (
     FaqAnswerSerializer,
@@ -73,6 +75,8 @@ class PartnerCompaniesListView(APIView):
 
 
 class FaqQuestionView(APIView):
+    throttle_classes = [FaqQuestionRateThrottle, FaqQuestionAnonRateThrottle]
+
     def get(self, request: Request):
         return Response(
             status=status.HTTP_200_OK,
@@ -108,6 +112,13 @@ class FaqQuestionView(APIView):
                     status=status.HTTP_400_BAD_REQUEST,
                     data={"message": serializer.errors},
                 )
+        except Throttled as exc:
+            wait = exc.wait()
+            logger.warning(f"Rate limit exceeded. Try again in {wait} seconds.")
+            return Response(
+                status=status.HTTP_429_TOO_MANY_REQUESTS,
+                data={"message": f"Rate limit exceeded. Try again in {wait} seconds."},
+            )
         except Exception as e:
             logger.error(f"Something went wrong, error: {e}")
             return Response(
