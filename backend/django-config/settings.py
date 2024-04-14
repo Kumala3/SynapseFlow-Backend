@@ -54,8 +54,14 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
-    "django.middleware.common.CommonMiddleware",
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_THROTTLE_RATES": {
+        "faq_question_anon_user": "3/hour",
+        "faq_question_user": "5/hour",
+    },
+}
 
 CORS_ALLOWED_ORIGINS = ["https://synapseflow.vercel.app"]
 
