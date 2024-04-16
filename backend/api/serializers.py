@@ -31,6 +31,24 @@ class FaqAnswerSerializer(serializers.ModelSerializer):
 
 
 class FaqQuestionSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the FaqQuestion model.
+
+    This serializer is used to validate and serialize FaqQuestion objects.
+    It provides validation for the 'email' and 'question' fields, and also
+    defines the fields to be included in the serialized representation.
+
+    Attributes:
+        email (serializers.EmailField): Field for the email address.
+        question (serializers.CharField): Field for the question text.
+
+    Methods:
+        validate_email(value): Validates the email address.
+        validate_question(question): Validates the question text.
+        create(validated_data): Creates a new FaqQuestion object.
+
+    """
+
     email = serializers.EmailField()
     question = serializers.CharField(max_length=800)
 
