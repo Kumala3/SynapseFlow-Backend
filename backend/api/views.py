@@ -26,6 +26,13 @@ logger = logging.getLogger(__name__)
 
 
 class FaqAnswersListView(APIView):
+    """
+    View to retrieve a list of FAQ answers.
+
+    Methods:
+        - get: Retrieves all FAQ answers and returns them in the response like a list.
+    """
+
     def get(self, request: Request):
         try:
             answers = FaqAnswer.objects.all()
@@ -50,6 +57,12 @@ class FaqAnswersListView(APIView):
 
 
 class PartnerCompaniesListView(APIView):
+    """
+    View to retrieve a list of partner companies.
+
+    Methods:
+        - get: Retrieves all partner companies and returns them in the response like a list.
+    """
     def get(self, request: Request):
         try:
             partner_companies = PartnerCompany.objects.all()
@@ -75,13 +88,19 @@ class PartnerCompaniesListView(APIView):
 
 
 class FaqQuestionView(APIView):
-    throttle_classes = [FaqQuestionRateThrottle, FaqQuestionAnonRateThrottle]
+    """
+    View for handling FAQ question submissions.
 
-    def get(self, request: Request):
-        return Response(
-            status=status.HTTP_200_OK,
-            data={"message": "This is the faq-question view"},
-        )
+    This view allows users to submit a question along with their email address.
+    The question and email are validated and saved using the FaqQuestionSerializer.
+    If the submission is successful, a success response is returned.
+    If there are any validation errors or exceptions occur, appropriate error responses are returned.
+
+    Methods:
+        - post(request: Request) -> Response: Handles the question submission.
+    """
+
+    throttle_classes = [FaqQuestionRateThrottle, FaqQuestionAnonRateThrottle]
 
     def post(self, request: Request):
         try:
@@ -128,6 +147,17 @@ class FaqQuestionView(APIView):
 
 
 class PricingPlansView(APIView):
+    """
+    A view for retrieving pricing plans.
+
+    This view handles GET requests and returns a list of pricing plans
+    available in the system. If no pricing plans are found, a 404 response
+    is returned. If an error occurs during the retrieval process, a 500
+    response is returned.
+
+    Methods:
+        get(request: Request) -> Response: Retrieves the pricing plans.
+    """
     def get(self, request: Request):
         try:
             pricing_plan = PricingPlan.objects.all()
