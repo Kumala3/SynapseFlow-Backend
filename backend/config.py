@@ -148,6 +148,6 @@ def load_config(path: str = None) -> Config:
 
     return Config(
         db=DbConfig.from_env(env),
-        # redis=RedisConfig.from_env(env),
+        redis=RedisConfig.from_env(env),
         misc=Miscellaneous.from_env(env),
     )
