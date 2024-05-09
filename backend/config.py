@@ -78,8 +78,12 @@ class RedisConfig:
         """
         Creates the RedisConfig object from environment variables.
         """
+        try:
+            redis_port = env.int("REDIS_PORT", default=6379, cast=int)
+        except ValueError:
+            redis_port = 6379
+
         redis_pass = env.str("REDIS_PASSWORD", default=None)
-        redis_port = env.int("REDIS_PORT", default=6379, cast=int)
         redis_host = env.str("REDIS_HOST", default="localhost")
 
         return RedisConfig(
