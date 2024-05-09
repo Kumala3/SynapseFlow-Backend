@@ -33,6 +33,9 @@ jobs:
         POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
         DB_HOST: ${{ secrets.DB_HOST }}
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+        REDIS_PORT: ${{ secrets.REDIS_PORT }}
+        REDIS_HOST: ${{ secrets.REDIS_HOST }}
       run: |
         cd backend
         python manage.py test
