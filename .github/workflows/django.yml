@@ -39,3 +39,5 @@ jobs:
       run: |
         cd backend
         python manage.py test
+    - name: Print Redis Port
+      run: echo "Redis Port is ${{ secrets.REDIS_PORT }}"
