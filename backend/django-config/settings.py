@@ -15,7 +15,7 @@ from config import load_config
 
 db = load_config().db
 misc = load_config().misc
-
+redis = load_config().redis
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,10 +29,9 @@ SECRET_KEY = misc.secret_key
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["api.candeel.me"]
+ALLOWED_HOSTS = ["api.candeel.me", "localhost"]
 
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -63,7 +62,7 @@ REST_FRAMEWORK = {
     },
 }
 
-CORS_ALLOWED_ORIGINS = ["https://synapseflow.vercel.app"]
+CORS_ALLOWED_ORIGINS = ["https://synapseflow.vercel.app", "http://localhost:3000"]
 
 ROOT_URLCONF = "django-config.urls"
 
@@ -100,6 +99,19 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": redis.dsn(),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
+# Using Redis for session management
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

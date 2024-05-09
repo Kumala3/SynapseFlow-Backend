@@ -35,11 +35,11 @@ class DbConfig:
         """
         Creates the DbConfig object from environment variables.
         """
-        host = env.str("DB_HOST")
-        password = env.str("POSTGRES_PASSWORD")
-        user = env.str("POSTGRES_USER")
-        database = env.str("POSTGRES_DB")
-        port = env.int("DB_PORT", 5432)
+        host = env.str("DB_HOST", default=None)
+        password = env.str("POSTGRES_PASSWORD", default=None)
+        user = env.str("POSTGRES_USER", default=None)
+        database = env.str("POSTGRES_DB", default=None)
+        port = env.int("DB_PORT", default=5432)
         return DbConfig(
             host=host, password=password, user=user, database=database, port=port
         )
@@ -78,9 +78,13 @@ class RedisConfig:
         """
         Creates the RedisConfig object from environment variables.
         """
-        redis_pass = env.str("REDIS_PASSWORD")
-        redis_port = env.int("REDIS_PORT")
-        redis_host = env.str("REDIS_HOST")
+        try:
+            redis_port = env.int("REDIS_PORT", default=6379, cast=int)
+        except ValueError:
+            redis_port = 6379
+
+        redis_pass = env.str("REDIS_PASSWORD", default=None)
+        redis_host = env.str("REDIS_HOST", default="localhost")
 
         return RedisConfig(
             redis_pass=redis_pass, redis_port=redis_port, redis_host=redis_host
@@ -107,7 +111,7 @@ class Miscellaneous:
         """
         Creates the Miscellaneous object from environment variables.
         """
-        secret_key = env.str("SECRET_KEY")
+        secret_key = env.str("SECRET_KEY", default=None)
         return Miscellaneous(secret_key=secret_key)
 
 
@@ -148,6 +152,6 @@ def load_config(path: str = None) -> Config:
 
     return Config(
         db=DbConfig.from_env(env),
-        # redis=RedisConfig.from_env(env),
+        redis=RedisConfig.from_env(env),
         misc=Miscellaneous.from_env(env),
     )

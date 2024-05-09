@@ -6,3 +6,4 @@ psycopg2-binary
 django-cors-headers
 email-validator
 drf-spectacular
+django-redis
