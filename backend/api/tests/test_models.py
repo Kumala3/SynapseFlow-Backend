@@ -12,7 +12,7 @@ class FaqAnswerTest(TestCase):
     def setUp(self) -> None:
         FaqAnswer.objects.create(
             title="How long AI generates a response?",
-            content="The response delivery depends on the request, but in generally, it doesn't take more than a few seconds. ",
+            content="The response delivery depends on the request, but in generally, it doesn't take more than a few seconds.",
         )
 
     def test_faq_answer(self):
