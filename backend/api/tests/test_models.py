@@ -31,23 +31,20 @@ class FaqAnswerTest(TestCase):
 
 class FaqQuestionTest(TestCase):
     def setUp(self):
-        FaqQuestion.objects.create(
+        self.faq_question = FaqQuestion.objects.create(
             email="kgroi332f@yahoo.com",
             question="How long could I ask the refund for a subscription after a purchase?",
         )
 
     def test_faq_question_creation(self):
-        faq_question = FaqQuestion.objects.get(email="kgroi332f@yahoo.com")
-
         self.assertEqual(
-            faq_question.question,
+            self.faq_question.question,
             "How long could I ask the refund for a subscription after a purchase?",
         )
-        self.assertEqual(faq_question.email, "kgroi332f@yahoo.com")
+        self.assertEqual(self.faq_question.email, "kgroi332f@yahoo.com")
 
     def test_faq_question_str(self):
-        faq_question = FaqQuestion.objects.get(email="kgroi332f@yahoo.com")
         self.assertEqual(
-            str(faq_question),
-            f"The faq-question-id: {faq_question.question_id};email: {faq_question.email}",
+            str(self.faq_question),
+            f"The faq-question-id: {self.faq_question.question_id};email: {self.faq_question.email}",
         )
