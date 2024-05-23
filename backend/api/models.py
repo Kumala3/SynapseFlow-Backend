@@ -42,7 +42,7 @@ class PricingPlan(models.Model):
     button_text = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.plan
+        return f"Plan: {self.plan}; Cost: {self.cost}"
 
 
 class PricingPlanAdvantage(models.Model):
@@ -52,4 +52,4 @@ class PricingPlanAdvantage(models.Model):
     advantage = models.TextField()
 
     def __str__(self):
-        return self.advantage
+        return f"Plan: {self.plan.plan}; Advantage: {self.advantage}"
