@@ -48,3 +48,70 @@ class FaqQuestionTest(TestCase):
             str(self.faq_question),
             f"The faq-question-id: {self.faq_question.question_id};email: {self.faq_question.email}",
         )
+
+
+class PartnerCompanyTest(TestCase):
+    def setUp(self):
+        self.partner_company = PartnerCompany.objects.create(
+            company_name="Google",
+            company_logo="https://postimg.cc/68y5FvN0",
+            company_website="https://about.google/",
+        )
+
+    def test_partner_company_creation(self):
+        self.assertEqual(self.partner_company.company_name, "Google")
+        self.assertEqual(
+            self.partner_company.company_logo, "https://postimg.cc/68y5FvN0"
+        )
+        self.assertEqual(self.partner_company.company_website, "https://about.google/")
+
+    def test_partner_company_str(self):
+        self.assertEqual(
+            str(self.partner_company),
+            f"The partner-company-id: {self.partner_company.company_id};company_name: Google",
+        )
+
+
+class PricingPlanTest(TestCase):
+    def setUp(self):
+        self.pricing_plan = PricingPlan.objects.create(
+            plan="Free",
+            description="Free plan to get started",
+            cost=0,
+            button_text="Get started",
+        )
+
+    def test_pricing_plan_creation(self):
+        self.assertEqual(self.pricing_plan.plan, "Free")
+        self.assertEqual(self.pricing_plan.description, "Free plan to get started")
+        self.assertEqual(self.pricing_plan.cost, 0)
+        self.assertEqual(self.pricing_plan.button_text, "Get started")
+
+    def test_pricing_plan_str(self):
+        self.assertEqual(
+            str(self.pricing_plan),
+            f"Plan: {self.pricing_plan.plan}; Cost: {self.pricing_plan.cost}",
+        )
+
+
+class PricingPlanAdvantageTest(TestCase):
+    def setUp(self):
+        self.pricing_plan_advantage = PricingPlanAdvantage.objects.create(
+            plan=PricingPlan.objects.create(
+                plan="Free",
+                description="Free plan to get started",
+                cost=0,
+                button_text="Get started",
+            ),
+            advantage="30 requests per day",
+        )
+
+    def test_pricing_plan_advantage_creation(self):
+        self.assertEqual(self.pricing_plan_advantage.plan.plan, "Free")
+        self.assertEqual(self.pricing_plan_advantage.advantage, "30 requests per day")
+
+    def test_pricing_plan_advantage_str(self):
+        self.assertEqual(
+            str(self.pricing_plan_advantage),
+            f"Plan: {self.pricing_plan_advantage.plan.plan}; Advantage: {self.pricing_plan_advantage.advantage}",
+        )
