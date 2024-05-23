@@ -10,23 +10,44 @@ from api.models import (
 
 class FaqAnswerTest(TestCase):
     def setUp(self) -> None:
-        FaqAnswer.objects.create(
+        self.faq_answer = FaqAnswer.objects.create(
             title="How long AI generates a response?",
             content="The response delivery depends on the request, but in generally, it doesn't take more than a few seconds.",
         )
 
-    def test_faq_answer(self):
-        faq_answer = FaqAnswer.objects.get(title="How long AI generates a response?")
-
+    def test_faq_answer_creation(self):
         self.assertEqual(
-            faq_answer.content,
+            self.faq_answer.content,
             "The response delivery depends on the request, but in generally, it doesn't take more than a few seconds.",
         )
-        self.assertEqual(faq_answer.title, "How long AI generates a response?")
+        self.assertEqual(self.faq_answer.title, "How long AI generates a response?")
 
     def test_faq_answer_str(self):
-        faq_answer = FaqAnswer.objects.get(title="How long AI generates a response?")
         self.assertEqual(
-            str(faq_answer),
-            f"The faq-answer-id: {faq_answer.answer_id};title: How long AI generates a response?",
+            str(self.faq_answer),
+            f"The faq-answer-id: {self.faq_answer.answer_id};title: How long AI generates a response?",
+        )
+
+
+class FaqQuestionTest(TestCase):
+    def setUp(self):
+        FaqQuestion.objects.create(
+            email="kgroi332f@yahoo.com",
+            question="How long could I ask the refund for a subscription after a purchase?",
+        )
+
+    def test_faq_question_creation(self):
+        faq_question = FaqQuestion.objects.get(email="kgroi332f@yahoo.com")
+
+        self.assertEqual(
+            faq_question.question,
+            "How long could I ask the refund for a subscription after a purchase?",
+        )
+        self.assertEqual(faq_question.email, "kgroi332f@yahoo.com")
+
+    def test_faq_question_str(self):
+        faq_question = FaqQuestion.objects.get(email="kgroi332f@yahoo.com")
+        self.assertEqual(
+            str(faq_question),
+            f"The faq-question-id: {faq_question.question_id};email: {faq_question.email}",
         )
