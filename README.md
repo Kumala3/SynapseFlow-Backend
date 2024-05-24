@@ -1,2 +1,2 @@
 # SynapseFlow-Backend
-API for the SynapseFlow website
+**RESTful API** for the [SynapseFlow](https://synapseflow.vercel.app/) website.
