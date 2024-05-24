@@ -29,24 +29,31 @@ jobs:
           - ./db_dump:/docker-entrypoint-initdb.d
 
     steps:
+    # Checks out repository's code and ensures consistency between different environments
+    - uses: actions/checkout@v3
+
+    # Set up the specific Python version to use
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
 
+    # Install dependencies specified in `requirements.txt`
     - name: Install Dependencies
       run: |
         cd backend
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    # Run migrations to create the database schemas
     - name: Run Migrations
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
       run: |
         cd backend
         python manage.py migrate
-    
+
+    # Run tests to ensure the application is working as expected
     - name: Run Tests
       env:
           DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}
