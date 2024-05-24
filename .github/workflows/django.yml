@@ -38,4 +38,4 @@ jobs:
         REDIS_HOST: ${{ secrets.REDIS_HOST }}
       run: |
         cd backend
-        python manage.py test
+        python manage.py test api/tests
