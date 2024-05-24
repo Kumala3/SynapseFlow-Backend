@@ -8,34 +8,48 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+
     strategy:
       max-parallel: 4
       matrix:
         python-version: ["3.8", "3.9", "3.10"]
 
+    services:
+      postgres:
+        image: postgres:13-alpine
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        volumes:
+          - pgdata:/var/lib/postgresql/data
+          - ./db_dump:/docker-entrypoint-initdb.d
+
     steps:
-    - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Install Dependencies
       run: |
         cd backend
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+
+    - name: Run Migrations
+      env:
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      run: |
+        cd backend
+        python manage.py migrate
+    
     - name: Run Tests
       env:
-        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-        DB_HOST: ${{ secrets.DB_HOST }}
-        SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
-        REDIS_PORT: ${{ secrets.REDIS_PORT }}
-        REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}
       run: |
         cd backend
         python manage.py test api/tests
