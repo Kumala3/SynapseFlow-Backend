@@ -47,12 +47,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Wait for PostgreSQL to be ready
-      run: |
-        until pg_isready -h localhost -p 5432 -U ${{ secrets.POSTGRES_USER }}; do
-          sleep 1
-        done
-
     # Run migrations to create the database schemas
     - name: Run Migrations
       env:
