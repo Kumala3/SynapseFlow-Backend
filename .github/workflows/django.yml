@@ -23,16 +23,16 @@ jobs:
         env:
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_PASSWORD: postgres
         options: >-
-          --health-cmd "pg_isready" 
+          --health-cmd pg_isready 
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
 
     steps:
-    # Checks out repository's code and ensures consistency between different environments
-    - uses: actions/checkout@v3
+    - name: Downloads a copy of the code in the repository before running CI tests
+      uses: actions/checkout@v3
 
     # Set up the specific Python version to use
     - name: Set up Python ${{ matrix.python-version }}
