@@ -51,7 +51,11 @@ jobs:
     - name: Run Migrations
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/${{ secrets.POSTGRES_DB }}
+        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        DB_HOST: postgres
+        DB_PORT: 5432
       run: |
         cd backend
         python manage.py migrate
@@ -59,7 +63,8 @@ jobs:
     # Run tests to ensure the application is working as expected
     - name: Run Tests
       env:
-          DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DB_PORT: 5432
       run: |
         cd backend
         python manage.py test api/tests
