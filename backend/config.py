@@ -44,6 +44,14 @@ class DbConfig:
             host=host, password=password, user=user, database=database, port=port
         )
 
+    def db_url(self) -> str:
+        """
+        Constructs and returns a database URL for this database configuration.
+        """
+        if self.password:
+            return f"postgres://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
+        else:
+            return f"postgres://{self.user}@{self.host}:{self.port}/{self.database}"
 
 @dataclass
 class RedisConfig:
