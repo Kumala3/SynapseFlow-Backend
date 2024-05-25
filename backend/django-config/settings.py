@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from config import load_config
+import dj_database_url
 
 db = load_config().db
 misc = load_config().misc
@@ -84,19 +85,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "django-config.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": db.database,
-        "USER": db.user,
-        "PASSWORD": db.password,
-        "HOST": db.host,
-        "PORT": db.port,
-    }
+    "default": dj_database_url.parse(
+        url=db.db_url(), conn_health_checks=True, conn_max_age=600
+    ),
 }
 
 CACHES = {
