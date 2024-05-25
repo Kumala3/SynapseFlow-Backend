@@ -18,12 +18,12 @@ jobs:
     services:
       postgres:
         image: postgres:13-alpine
-        ports:
-          - 5432:5432
         env:
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
         options: >-
           --health-cmd pg_isready 
           --health-interval 10s
@@ -50,12 +50,8 @@ jobs:
     # Run migrations to create the database schemas
     - name: Run Migrations
       env:
-        SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        DB_HOST: postgres
-        DB_PORT: 5432
+        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/${{ secrets.POSTGRES_DB }}
+        GITHUB_ACTIONS: true
       run: |
         cd backend
         python manage.py migrate
@@ -63,8 +59,9 @@ jobs:
     # Run tests to ensure the application is working as expected
     - name: Run Tests
       env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          DB_PORT: 5432
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/${{ secrets.POSTGRES_DB }}
+        GITHUB_ACTIONS: true
       run: |
         cd backend
         python manage.py test api/tests
