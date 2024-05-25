@@ -11,14 +11,17 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import os
-from pathlib import Path
 import dj_database_url
+from pathlib import Path
+from config import load_config
+
 
 if os.getenv("GITHUB_ACTIONS"):
     DATABASE_URL = os.getenv("DATABASE_URL")
-else:
-    from config import load_config
 
+    misc = load_config().misc
+    redis = load_config().redis
+else:
     db = load_config().db
     misc = load_config().misc
     redis = load_config().redis
