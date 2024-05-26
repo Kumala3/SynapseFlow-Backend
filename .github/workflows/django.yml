@@ -2,9 +2,9 @@ name: Django CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
@@ -14,6 +14,10 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: ["3.8", "3.9", "3.10"]
+
+    env:
+      DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/${{ secrets.POSTGRES_DB }}
+      GITHUB_ACTIONS: true
 
     services:
       postgres:
@@ -31,37 +35,32 @@ jobs:
           --health-retries 5
 
     steps:
-    - name: Downloads a copy of the code in the repository before running CI tests
-      uses: actions/checkout@v3
+      - name: Downloads a copy of the code in the repository before running CI tests
+        uses: actions/checkout@v3
 
-    # Set up the specific Python version to use
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
+      # Set up the specific Python version to use
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    # Install dependencies specified in `requirements.txt`
-    - name: Install Dependencies
-      run: |
-        cd backend
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      # Install dependencies specified in `requirements.txt`
+      - name: Install Dependencies
+        run: |
+          cd backend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    # Run migrations to create the database schemas
-    - name: Run Migrations
-      env:
-        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/${{ secrets.POSTGRES_DB }}
-        GITHUB_ACTIONS: true
-      run: |
-        cd backend
-        python manage.py migrate
+      # Run migrations to create the database schemas
+      - name: Run Migrations
+        run: |
+          cd backend
+          python manage.py migrate
 
-    # Run tests to ensure the application is working as expected
-    - name: Run Tests
-      env:
-        SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/${{ secrets.POSTGRES_DB }}
-        GITHUB_ACTIONS: true
-      run: |
-        cd backend
-        python manage.py test api/tests
+      # Run tests to ensure the application is working as expected
+      - name: Run Tests
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        run: |
+          cd backend
+          python manage.py test api/tests
