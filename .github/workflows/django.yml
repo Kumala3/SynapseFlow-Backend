@@ -39,7 +39,8 @@ jobs:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
     steps:
-      - name: Downloads a copy of the code in the repository before running CI tests
+      # Downloads a copy of the code in the repository before running CI tests
+      - name: Downloads a copy of the code
         uses: actions/checkout@v3
 
       # Set up the specific Python version to use
