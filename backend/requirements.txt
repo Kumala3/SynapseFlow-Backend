@@ -7,3 +7,4 @@ django-cors-headers
 email-validator
 drf-spectacular
 django-redis
+dj-database-url

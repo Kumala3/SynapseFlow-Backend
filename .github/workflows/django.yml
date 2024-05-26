@@ -2,9 +2,9 @@ name: Django CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
@@ -16,40 +16,54 @@ jobs:
         python-version: ["3.8", "3.9", "3.10"]
 
     services:
-      postgres:
+      postgres-db:
         image: postgres:13-alpine
-        ports:
-          - 5432:5432
         env:
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        volumes:
-          - pgdata:/var/lib/postgresql/data
-          - ./db_dump:/docker-entrypoint-initdb.d
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready 
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
     steps:
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
+      # Downloads a copy of the code in the repository before running CI tests
+      - name: Downloads a copy of the code
+        uses: actions/checkout@v3
 
-    - name: Install Dependencies
-      run: |
-        cd backend
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      # Set up the specific Python version to use
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Run Migrations
-      env:
-        SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      run: |
-        cd backend
-        python manage.py migrate
-    
-    - name: Run Tests
-      env:
-          DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}
-      run: |
-        cd backend
-        python manage.py test api/tests
+      # Install dependencies specified in `requirements.txt`
+      - name: Install Dependencies
+        run: |
+          cd backend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Run migrations to create the database schemas
+      - name: Run Migrations
+        run: |
+          cd backend
+          python manage.py migrate
+
+      # Run tests to ensure the application is working as expected
+      - name: Run Tests
+        run: |
+          cd backend
+          python manage.py test api/tests
