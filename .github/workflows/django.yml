@@ -16,8 +16,8 @@ jobs:
         python-version: ["3.8", "3.9", "3.10"]
 
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      DATABASE_URL: ${{ vars.DATABASE_URL }}
+      SECRET_KEY: ${{ vars.SECRET_KEY }}
       GITHUB_ACTIONS: true
 
     services:
