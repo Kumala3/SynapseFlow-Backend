@@ -53,6 +53,7 @@ class DbConfig:
         else:
             return f"postgres://{self.user}@{self.host}:{self.port}/{self.database}"
 
+
 @dataclass
 class RedisConfig:
     """
