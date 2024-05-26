@@ -16,19 +16,12 @@ from pathlib import Path
 from config import load_config
 
 
-if os.getenv("GITHUB_ACTIONS"):
-    DATABASE_URL = os.getenv("DATABASE_URL")
 
-    if not DATABASE_URL:
-        raise ValueError("DATABASE_URL environment variable is not set")
-    misc = load_config().misc
-    redis = load_config().redis
-else:
-    db = load_config().db
-    misc = load_config().misc
-    redis = load_config().redis
+misc = load_config().misc
+redis = load_config().redis
+db = load_config().db
 
-    DATABASE_URL = db.db_url()
+DATABASE_URL = db.db_url()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
