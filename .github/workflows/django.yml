@@ -16,9 +16,9 @@ jobs:
         python-version: ["3.8", "3.9", "3.10"]
 
     env:
-      DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/${{ secrets.POSTGRES_DB }}
-      GITHUB_ACTIONS: true
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      GITHUB_ACTIONS: true
 
     services:
       postgres:
