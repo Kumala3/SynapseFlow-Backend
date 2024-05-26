@@ -10,12 +10,16 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import dj_database_url
 from pathlib import Path
 from config import load_config
 
-db = load_config().db
+
 misc = load_config().misc
 redis = load_config().redis
+db = load_config().db
+
+DATABASE_URL = db.db_url()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -84,19 +88,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "django-config.wsgi.application"
 
-
-# Database
+# Database connection
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": db.database,
-        "USER": db.user,
-        "PASSWORD": db.password,
-        "HOST": db.host,
-        "PORT": db.port,
-    }
+    "default": dj_database_url.parse(
+        url=DATABASE_URL, conn_health_checks=True, conn_max_age=600
+    ),
 }
 
 CACHES = {

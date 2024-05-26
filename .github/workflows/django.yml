@@ -2,40 +2,68 @@ name: Django CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+
     strategy:
       max-parallel: 4
       matrix:
         python-version: ["3.8", "3.9", "3.10"]
 
+    services:
+      postgres-db:
+        image: postgres:13-alpine
+        env:
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready 
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      run: |
-        cd backend
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Run Tests
-      env:
-        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-        DB_HOST: ${{ secrets.DB_HOST }}
-        SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
-        REDIS_PORT: ${{ secrets.REDIS_PORT }}
-        REDIS_HOST: ${{ secrets.REDIS_HOST }}
-      run: |
-        cd backend
-        python manage.py test
+      # Downloads a copy of the code in the repository before running CI tests
+      - name: Downloads a copy of the code
+        uses: actions/checkout@v3
+
+      # Set up the specific Python version to use
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # Install dependencies specified in `requirements.txt`
+      - name: Install Dependencies
+        run: |
+          cd backend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Run migrations to create the database schemas
+      - name: Run Migrations
+        run: |
+          cd backend
+          python manage.py migrate
+
+      # Run tests to ensure the application is working as expected
+      - name: Run Tests
+        run: |
+          cd backend
+          python manage.py test api/tests
