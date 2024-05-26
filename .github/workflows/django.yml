@@ -50,9 +50,12 @@ jobs:
       # Run migrations to create the database schemas
       - name: Run Migrations
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          GITHUB_ACTIONS: true
         run: |
           cd backend
           python manage.py migrate
@@ -60,9 +63,12 @@ jobs:
       # Run tests to ensure the application is working as expected
       - name: Run Tests
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          GITHUB_ACTIONS: true
         run: |
           cd backend
           python manage.py test api/tests
