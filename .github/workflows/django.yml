@@ -15,18 +15,13 @@ jobs:
       matrix:
         python-version: ["3.8", "3.9", "3.10"]
 
-    env:
-      DATABASE_URL: ${{ vars.DATABASE_URL }}
-      SECRET_KEY: ${{ vars.SECRET_KEY }}
-      GITHUB_ACTIONS: true
-
     services:
       postgres:
         image: postgres:13-alpine
         env:
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         ports:
           - 5432:5432
         options: >-
@@ -54,12 +49,21 @@ jobs:
 
       # Run migrations to create the database schemas
       - name: Run Migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          GITHUB_ACTIONS: true
+
         run: |
           cd backend
           python manage.py migrate
 
       # Run tests to ensure the application is working as expected
       - name: Run Tests
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          GITHUB_ACTIONS: true
         run: |
           cd backend
           python manage.py test api/tests
