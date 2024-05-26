@@ -19,6 +19,8 @@ from config import load_config
 if os.getenv("GITHUB_ACTIONS"):
     DATABASE_URL = os.getenv("DATABASE_URL")
 
+    if not DATABASE_URL:
+        raise ValueError("DATABASE_URL environment variable is not set")
     misc = load_config().misc
     redis = load_config().redis
 else:
