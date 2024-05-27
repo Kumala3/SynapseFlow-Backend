@@ -29,7 +29,7 @@ services:
     image: redis:latest
     container_name: redis
     restart: always
-    command: sh -c "redis-server --port $REDIS_PORT --save 20 1 --loglevel warning --requirepass $REDIS_PASSWORD"
+    command: sh -c 'redis-server --port $REDIS_PORT --save 20 1 --loglevel warning --requirepass $REDIS_PASSWORD'
     env_file:
       - ".env"
     volumes:
