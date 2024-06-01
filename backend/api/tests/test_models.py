@@ -15,11 +15,13 @@ class FaqAnswerTest(TestCase):
             content="The response delivery depends on the request, but in generally, it doesn't take more than a few seconds.",
         )
 
-    def test_faq_answer_creation(self):
+    def test_faq_answer_content(self):
         self.assertEqual(
             self.faq_answer.content,
             "The response delivery depends on the request, but in generally, it doesn't take more than a few seconds.",
         )
+
+    def test_faq_answer_title(self):
         self.assertEqual(self.faq_answer.title, "How long AI generates a response?")
 
     def test_faq_answer_str(self):
@@ -36,11 +38,13 @@ class FaqQuestionTest(TestCase):
             question="How long could I ask the refund for a subscription after a purchase?",
         )
 
-    def test_faq_question_creation(self):
+    def test_faq_question_question(self):
         self.assertEqual(
             self.faq_question.question,
             "How long could I ask the refund for a subscription after a purchase?",
         )
+
+    def test_faq_question_email(self):
         self.assertEqual(self.faq_question.email, "kgroi332f@yahoo.com")
 
     def test_faq_question_str(self):
@@ -58,11 +62,15 @@ class PartnerCompanyTest(TestCase):
             company_website="https://about.google/",
         )
 
-    def test_partner_company_creation(self):
+    def test_partner_company_name(self):
         self.assertEqual(self.partner_company.company_name, "Google")
+
+    def test_partner_company_logo(self):
         self.assertEqual(
             self.partner_company.company_logo, "https://postimg.cc/68y5FvN0"
         )
+
+    def test_partner_company_website(self):
         self.assertEqual(self.partner_company.company_website, "https://about.google/")
 
     def test_partner_company_str(self):
@@ -81,10 +89,16 @@ class PricingPlanTest(TestCase):
             button_text="Get started",
         )
 
-    def test_pricing_plan_creation(self):
+    def test_pricing_plan_plan(self):
         self.assertEqual(self.pricing_plan.plan, "Free")
+
+    def test_pricing_plan_description(self):
         self.assertEqual(self.pricing_plan.description, "Free plan to get started")
+
+    def test_pricing_plan_cost(self):
         self.assertEqual(self.pricing_plan.cost, 0)
+
+    def test_pricing_plan_button_text(self):
         self.assertEqual(self.pricing_plan.button_text, "Get started")
 
     def test_pricing_plan_str(self):
@@ -106,8 +120,10 @@ class PricingPlanAdvantageTest(TestCase):
             advantage="30 requests per day",
         )
 
-    def test_pricing_plan_advantage_creation(self):
+    def test_pricing_plan_advantage_plan(self):
         self.assertEqual(self.pricing_plan_advantage.plan.plan, "Free")
+
+    def test_pricing_plan_advantage_advantage(self):
         self.assertEqual(self.pricing_plan_advantage.advantage, "30 requests per day")
 
     def test_pricing_plan_advantage_str(self):
