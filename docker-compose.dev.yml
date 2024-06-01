@@ -1,0 +1,55 @@
+version: "3.9"
+
+name: synapse-backend
+
+services:
+  database:
+    image: postgres:13-alpine
+    container_name: postgres
+    ports:
+      - "2311:5432"
+    restart: always
+    env_file:
+      - ".env"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    command: 'redis-server --port $REDIS_PORT --save 20 1 --loglevel warning --requirepass $REDIS_PASSWORD'
+    env_file:
+      - ".env"
+    volumes:
+      - cache:/data
+
+  rest-api:
+    image: django-app
+    container_name: rest-api
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: "python manage.py runserver 0.0.0.0:6020"
+    restart: always
+    depends_on:
+      - database
+      - redis
+    env_file:
+      - ".env"
+    ports:
+      - "6020:6020"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+volumes:
+  pgdata: {}
+  cache: {}
