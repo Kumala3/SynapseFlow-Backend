@@ -89,7 +89,7 @@ class PartnerCompaniesListView(APIView):
 
 class FaqQuestionView(APIView):
     """
-    View for handling FAQ question submissions.
+    View for handling FaQ question submissions.
 
     This view allows users to submit a question along with their email address.
     The question and email are validated and saved using the FaqQuestionSerializer.
